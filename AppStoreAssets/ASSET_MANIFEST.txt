@@ -1,7 +1,8 @@
 NHS CareerCoach AI App Store Assets
 
-Screenshots: AppStoreAssets/screenshots/iphone-6.5 - 10 PNG files, 1242 x 2688 px, RGB, 72 dpi.
-Subscription promotional images: AppStoreAssets/subscription-promotional-images - 3 PNG files, 1024 x 1024 px, RGB, 72 dpi, text-light abstract premium images.
-Subscription review screenshots: AppStoreAssets/subscription-review-screenshots - 3 PNG files, 1242 x 2688 px, RGB, 72 dpi.
+Screenshots: AppStoreAssets/screenshots/iphone-6.5 - 10 PNG files, 1242 x 2688 px, RGB, 72 dpi, premium healthcare-professional background treatment.
+Subscription promotional images: AppStoreAssets/subscription-promotional-images - 3 PNG files, 1024 x 1024 px, RGB, 72 dpi, diverse nurses, doctors and healthcare professionals in a dark premium coaching composition.
+Subscription review screenshots: AppStoreAssets/subscription-review-screenshots - 3 PNG files, 1242 x 2688 px, RGB, 72 dpi, humanized review-ready paywall visuals.
+Source background: AppStoreAssets/source/human-healthcare-background.png - generated original premium healthcare-professional composition, with no readable logos or NHS marks.
 
-Note: App Store Connect visible iPhone 6.5-inch screenshot accepted portrait size is 1242 x 2688 px. Apple documentation for in-app purchase promotional images requires JPG or PNG, 1024 x 1024 px, 72 dpi, RGB, flattened, no rounded corners.
+Note: Visuals use an original generated healthcare-professional background with varied skin tones, nurse/doctor/professional cues, and no NHS affiliation or guaranteed employment outcome claims.
