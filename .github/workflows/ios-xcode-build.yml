@@ -1,0 +1,51 @@
+name: iOS Xcode Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "NHS CareerCoach AI/**"
+      - "NHS CareerCoach AI.xcodeproj/**"
+      - ".github/workflows/ios-xcode-build.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "NHS CareerCoach AI/**"
+      - "NHS CareerCoach AI.xcodeproj/**"
+      - ".github/workflows/ios-xcode-build.yml"
+
+concurrency:
+  group: ios-xcode-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build NHS CareerCoach AI
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: |
+          xcodebuild -version
+          xcode-select -p
+
+      - name: List project schemes
+        run: |
+          xcodebuild -list -project "NHS CareerCoach AI.xcodeproj"
+
+      - name: Build app for iOS Simulator
+        run: |
+          xcodebuild \
+            -project "NHS CareerCoach AI.xcodeproj" \
+            -scheme "NHS CareerCoach AI" \
+            -destination "generic/platform=iOS Simulator" \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            clean build
