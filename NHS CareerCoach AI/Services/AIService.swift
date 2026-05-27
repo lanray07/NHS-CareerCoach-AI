@@ -275,7 +275,7 @@ struct RemoteAIService: AIService {
     }
 
     func generateInterviewQuestion(category: InterviewCategory, band: String, mode: InterviewMode) async throws -> InterviewQuestion {
-        let response: RemoteAIResponse = try await post(module: "interview_question", targetBand: band, experienceNotes: "\(category.rawValue) \(mode.rawValue)")
+        let response: RemoteAIResponse = try await post(module: "interview_question", experienceNotes: "\(category.rawValue) \(mode.rawValue)", targetBand: band)
         return InterviewQuestion(question: response.summary, category: category.rawValue, coachingPrompt: "Use STAR and connect the answer to NHS values.")
     }
 
