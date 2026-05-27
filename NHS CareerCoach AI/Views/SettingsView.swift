@@ -169,7 +169,7 @@ struct SettingsView: View {
         }
     }
 
-    private func pickerRow<T: RawRepresentable & CaseIterable & Identifiable>(_ title: String, selection: Binding<T>, values: [T]) -> some View where T.RawValue == String {
+    private func pickerRow<T: RawRepresentable & CaseIterable & Identifiable & Hashable>(_ title: String, selection: Binding<T>, values: [T]) -> some View where T.RawValue == String {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.caption.weight(.bold))
