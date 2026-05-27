@@ -30,8 +30,21 @@ jobs:
       - name: Select Xcode
         run: |
           set -euo pipefail
-          sudo xcode-select -s /Applications/Xcode_16.4.app
+          if compgen -G "/Applications/Xcode_26*.app" > /dev/null; then
+            XCODE_PATH="$(ls -d /Applications/Xcode_26*.app | sort | tail -n 1)"
+          elif [ -d "/Applications/Xcode.app" ]; then
+            XCODE_PATH="/Applications/Xcode.app"
+          else
+            XCODE_PATH="$(ls -d /Applications/Xcode*.app | sort | tail -n 1)"
+          fi
+          echo "Selecting $XCODE_PATH"
+          sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
           xcodebuild -version
+          XCODE_MAJOR="$(xcodebuild -version | awk '/Xcode / { split($2, version, "."); print version[1] }')"
+          if [ "$XCODE_MAJOR" -lt 26 ]; then
+            echo "::error::App Store Connect currently requires the iOS 26 SDK. This runner selected Xcode $XCODE_MAJOR."
+            exit 1
+          fi
 
       - name: Prepare build number
         run: |

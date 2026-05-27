@@ -431,6 +431,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -438,6 +439,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "NHS CareerCoach AI";
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "NHS CareerCoach AI uses the microphone to capture mock interview answers and voice notes you choose to record.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "NHS CareerCoach AI uses speech recognition to transcribe your spoken interview practice and application notes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -462,6 +464,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -469,6 +472,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "NHS CareerCoach AI";
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "NHS CareerCoach AI uses the microphone to capture mock interview answers and voice notes you choose to record.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "NHS CareerCoach AI uses speech recognition to transcribe your spoken interview practice and application notes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
