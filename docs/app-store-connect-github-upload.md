@@ -4,26 +4,22 @@ The compile-only workflow proves the app builds. App Store Connect still needs a
 
 Use the manual `iOS App Store Upload` workflow after adding these repository secrets in GitHub:
 
-- `ASC_API_KEY_ID`
-- `ASC_API_ISSUER_ID`
-- `ASC_API_PRIVATE_KEY_BASE64`
-- `IOS_DISTRIBUTION_CERTIFICATE_BASE64`
-- `IOS_DISTRIBUTION_CERTIFICATE_PASSWORD`
-- `IOS_PROVISIONING_PROFILE_BASE64`
+- `APPLE_TEAM_ID`
+- `APP_STORE_CONNECT_API_KEY_ID`
+- `APP_STORE_CONNECT_API_ISSUER_ID`
+- `APP_STORE_CONNECT_API_PRIVATE_KEY`
 
-The App Store Connect app bundle ID is `com.nhscareercoach.app`, so the provisioning profile must be an App Store distribution profile for that bundle ID.
+The App Store Connect app bundle ID is `com.nhscareercoach.app`.
 
 ## Encoding files for secrets
 
-On macOS:
+The private key can be pasted as the raw `.p8` file contents. If you prefer encoding it first, use:
 
 ```sh
 base64 -i AuthKey_XXXXXXXXXX.p8 | pbcopy
-base64 -i ios_distribution.p12 | pbcopy
-base64 -i NHS_CareerCoach_App_Store.mobileprovision | pbcopy
 ```
 
-Paste those values into the matching `*_BASE64` GitHub secrets.
+Paste that value into `APP_STORE_CONNECT_API_PRIVATE_KEY`.
 
 ## Running the upload
 
