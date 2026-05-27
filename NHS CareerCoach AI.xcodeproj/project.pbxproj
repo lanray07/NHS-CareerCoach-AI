@@ -1,0 +1,516 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A00000000000000000000001 /* NHSCareerCoachAIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000002 /* NHSCareerCoachAIApp.swift */; };
+		A00000000000000000000002 /* AppModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000003 /* AppModels.swift */; };
+		A00000000000000000000003 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000004 /* AppState.swift */; };
+		A00000000000000000000004 /* FeatureViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000005 /* FeatureViewModels.swift */; };
+		A00000000000000000000005 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000006 /* AIService.swift */; };
+		A00000000000000000000006 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000007 /* SubscriptionService.swift */; };
+		A00000000000000000000007 /* PDFExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000008 /* PDFExportService.swift */; };
+		A00000000000000000000008 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000009 /* NotificationService.swift */; };
+		A00000000000000000000009 /* PremiumTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000010 /* PremiumTheme.swift */; };
+		A00000000000000000000010 /* PremiumComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000011 /* PremiumComponents.swift */; };
+		A00000000000000000000011 /* VoiceServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000012 /* VoiceServices.swift */; };
+		A00000000000000000000012 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000013 /* RootView.swift */; };
+		A00000000000000000000013 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000014 /* OnboardingView.swift */; };
+		A00000000000000000000014 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000015 /* DashboardView.swift */; };
+		A00000000000000000000015 /* JobDescriptionScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000016 /* JobDescriptionScannerView.swift */; };
+		A00000000000000000000016 /* SupportingStatementBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000017 /* SupportingStatementBuilderView.swift */; };
+		A00000000000000000000017 /* VoiceInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000018 /* VoiceInputView.swift */; };
+		A00000000000000000000018 /* MockInterviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000019 /* MockInterviewView.swift */; };
+		A00000000000000000000019 /* NHSValuesCoachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000020 /* NHSValuesCoachView.swift */; };
+		A00000000000000000000020 /* STARAnswerBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000021 /* STARAnswerBuilderView.swift */; };
+		A00000000000000000000021 /* ApplicationTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000022 /* ApplicationTrackerView.swift */; };
+		A00000000000000000000022 /* ReadinessDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000023 /* ReadinessDashboardView.swift */; };
+		A00000000000000000000023 /* CareerProgressionCoachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000024 /* CareerProgressionCoachView.swift */; };
+		A00000000000000000000024 /* ShareCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000025 /* ShareCardsView.swift */; };
+		A00000000000000000000025 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000026 /* PaywallView.swift */; };
+		A00000000000000000000026 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000027 /* SettingsView.swift */; };
+		A00000000000000000000027 /* WidgetArchitecturePlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000028 /* WidgetArchitecturePlaceholder.swift */; };
+		A00000000000000000000028 /* WatchArchitecturePlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000029 /* WatchArchitecturePlaceholder.swift */; };
+		A00000000000000000000029 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000030 /* Assets.xcassets */; };
+		A00000000000000000000030 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000031 /* PrivacyInfo.xcprivacy */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B00000000000000000000001 /* NHS CareerCoach AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NHS CareerCoach AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B00000000000000000000002 /* NHSCareerCoachAIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NHSCareerCoachAIApp.swift; sourceTree = "<group>"; };
+		B00000000000000000000003 /* AppModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModels.swift; sourceTree = "<group>"; };
+		B00000000000000000000004 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		B00000000000000000000005 /* FeatureViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureViewModels.swift; sourceTree = "<group>"; };
+		B00000000000000000000006 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
+		B00000000000000000000007 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
+		B00000000000000000000008 /* PDFExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportService.swift; sourceTree = "<group>"; };
+		B00000000000000000000009 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		B00000000000000000000010 /* PremiumTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumTheme.swift; sourceTree = "<group>"; };
+		B00000000000000000000011 /* PremiumComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumComponents.swift; sourceTree = "<group>"; };
+		B00000000000000000000012 /* VoiceServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceServices.swift; sourceTree = "<group>"; };
+		B00000000000000000000013 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		B00000000000000000000014 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		B00000000000000000000015 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		B00000000000000000000016 /* JobDescriptionScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobDescriptionScannerView.swift; sourceTree = "<group>"; };
+		B00000000000000000000017 /* SupportingStatementBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportingStatementBuilderView.swift; sourceTree = "<group>"; };
+		B00000000000000000000018 /* VoiceInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceInputView.swift; sourceTree = "<group>"; };
+		B00000000000000000000019 /* MockInterviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInterviewView.swift; sourceTree = "<group>"; };
+		B00000000000000000000020 /* NHSValuesCoachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NHSValuesCoachView.swift; sourceTree = "<group>"; };
+		B00000000000000000000021 /* STARAnswerBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STARAnswerBuilderView.swift; sourceTree = "<group>"; };
+		B00000000000000000000022 /* ApplicationTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationTrackerView.swift; sourceTree = "<group>"; };
+		B00000000000000000000023 /* ReadinessDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadinessDashboardView.swift; sourceTree = "<group>"; };
+		B00000000000000000000024 /* CareerProgressionCoachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareerProgressionCoachView.swift; sourceTree = "<group>"; };
+		B00000000000000000000025 /* ShareCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardsView.swift; sourceTree = "<group>"; };
+		B00000000000000000000026 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		B00000000000000000000027 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B00000000000000000000028 /* WidgetArchitecturePlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetArchitecturePlaceholder.swift; sourceTree = "<group>"; };
+		B00000000000000000000029 /* WatchArchitecturePlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchArchitecturePlaceholder.swift; sourceTree = "<group>"; };
+		B00000000000000000000030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B00000000000000000000031 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D00000000000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C00000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				C00000000000000000000003 /* NHS CareerCoach AI */,
+				C00000000000000000000002 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C00000000000000000000002 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000001 /* NHS CareerCoach AI.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000003 /* NHS CareerCoach AI */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000002 /* NHSCareerCoachAIApp.swift */,
+				C00000000000000000000004 /* Models */,
+				C00000000000000000000005 /* Views */,
+				C00000000000000000000006 /* ViewModels */,
+				C00000000000000000000007 /* Services */,
+				C00000000000000000000008 /* Components */,
+				C00000000000000000000009 /* Voice */,
+				C00000000000000000000010 /* WidgetsPlaceholder */,
+				C00000000000000000000011 /* WatchPlaceholder */,
+				C00000000000000000000012 /* Resources */,
+			);
+			path = "NHS CareerCoach AI";
+			sourceTree = "<group>";
+		};
+		C00000000000000000000004 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000003 /* AppModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000005 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000013 /* RootView.swift */,
+				B00000000000000000000014 /* OnboardingView.swift */,
+				B00000000000000000000015 /* DashboardView.swift */,
+				B00000000000000000000016 /* JobDescriptionScannerView.swift */,
+				B00000000000000000000017 /* SupportingStatementBuilderView.swift */,
+				B00000000000000000000018 /* VoiceInputView.swift */,
+				B00000000000000000000019 /* MockInterviewView.swift */,
+				B00000000000000000000020 /* NHSValuesCoachView.swift */,
+				B00000000000000000000021 /* STARAnswerBuilderView.swift */,
+				B00000000000000000000022 /* ApplicationTrackerView.swift */,
+				B00000000000000000000023 /* ReadinessDashboardView.swift */,
+				B00000000000000000000024 /* CareerProgressionCoachView.swift */,
+				B00000000000000000000025 /* ShareCardsView.swift */,
+				B00000000000000000000026 /* PaywallView.swift */,
+				B00000000000000000000027 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000006 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000004 /* AppState.swift */,
+				B00000000000000000000005 /* FeatureViewModels.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000007 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000006 /* AIService.swift */,
+				B00000000000000000000007 /* SubscriptionService.swift */,
+				B00000000000000000000008 /* PDFExportService.swift */,
+				B00000000000000000000009 /* NotificationService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000008 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000010 /* PremiumTheme.swift */,
+				B00000000000000000000011 /* PremiumComponents.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000009 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000012 /* VoiceServices.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000010 /* WidgetsPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000028 /* WidgetArchitecturePlaceholder.swift */,
+			);
+			path = WidgetsPlaceholder;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000011 /* WatchPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000029 /* WatchArchitecturePlaceholder.swift */,
+			);
+			path = WatchPlaceholder;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000012 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000030 /* Assets.xcassets */,
+				B00000000000000000000031 /* PrivacyInfo.xcprivacy */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F00000000000000000000001 /* NHS CareerCoach AI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E00000000000000000000006 /* Build configuration list for PBXNativeTarget "NHS CareerCoach AI" */;
+			buildPhases = (
+				D00000000000000000000001 /* Sources */,
+				D00000000000000000000002 /* Resources */,
+				D00000000000000000000003 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "NHS CareerCoach AI";
+			productName = "NHS CareerCoach AI";
+			productReference = B00000000000000000000001 /* NHS CareerCoach AI.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F00000000000000000000002 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					F00000000000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = E00000000000000000000005 /* Build configuration list for PBXProject "NHS CareerCoach AI" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C00000000000000000000001;
+			productRefGroup = C00000000000000000000002 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F00000000000000000000001 /* NHS CareerCoach AI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D00000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000000000000000000029 /* Assets.xcassets in Resources */,
+				A00000000000000000000030 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D00000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000000000000000000001 /* NHSCareerCoachAIApp.swift in Sources */,
+				A00000000000000000000002 /* AppModels.swift in Sources */,
+				A00000000000000000000003 /* AppState.swift in Sources */,
+				A00000000000000000000004 /* FeatureViewModels.swift in Sources */,
+				A00000000000000000000005 /* AIService.swift in Sources */,
+				A00000000000000000000006 /* SubscriptionService.swift in Sources */,
+				A00000000000000000000007 /* PDFExportService.swift in Sources */,
+				A00000000000000000000008 /* NotificationService.swift in Sources */,
+				A00000000000000000000009 /* PremiumTheme.swift in Sources */,
+				A00000000000000000000010 /* PremiumComponents.swift in Sources */,
+				A00000000000000000000011 /* VoiceServices.swift in Sources */,
+				A00000000000000000000012 /* RootView.swift in Sources */,
+				A00000000000000000000013 /* OnboardingView.swift in Sources */,
+				A00000000000000000000014 /* DashboardView.swift in Sources */,
+				A00000000000000000000015 /* JobDescriptionScannerView.swift in Sources */,
+				A00000000000000000000016 /* SupportingStatementBuilderView.swift in Sources */,
+				A00000000000000000000017 /* VoiceInputView.swift in Sources */,
+				A00000000000000000000018 /* MockInterviewView.swift in Sources */,
+				A00000000000000000000019 /* NHSValuesCoachView.swift in Sources */,
+				A00000000000000000000020 /* STARAnswerBuilderView.swift in Sources */,
+				A00000000000000000000021 /* ApplicationTrackerView.swift in Sources */,
+				A00000000000000000000022 /* ReadinessDashboardView.swift in Sources */,
+				A00000000000000000000023 /* CareerProgressionCoachView.swift in Sources */,
+				A00000000000000000000024 /* ShareCardsView.swift in Sources */,
+				A00000000000000000000025 /* PaywallView.swift in Sources */,
+				A00000000000000000000026 /* SettingsView.swift in Sources */,
+				A00000000000000000000027 /* WidgetArchitecturePlaceholder.swift in Sources */,
+				A00000000000000000000028 /* WatchArchitecturePlaceholder.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E00000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E00000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E00000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "NHS CareerCoach AI";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "NHS CareerCoach AI uses the microphone to capture mock interview answers and voice notes you choose to record.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "NHS CareerCoach AI uses speech recognition to transcribe your spoken interview practice and application notes.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.nhscareercoachai;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E00000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "NHS CareerCoach AI";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "NHS CareerCoach AI uses the microphone to capture mock interview answers and voice notes you choose to record.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "NHS CareerCoach AI uses speech recognition to transcribe your spoken interview practice and application notes.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.nhscareercoachai;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E00000000000000000000005 /* Build configuration list for PBXProject "NHS CareerCoach AI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E00000000000000000000001 /* Debug */,
+				E00000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E00000000000000000000006 /* Build configuration list for PBXNativeTarget "NHS CareerCoach AI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E00000000000000000000003 /* Debug */,
+				E00000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F00000000000000000000002 /* Project object */;
+}
