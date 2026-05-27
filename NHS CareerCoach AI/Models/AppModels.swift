@@ -309,14 +309,14 @@ final class VoiceTranscript: Identifiable {
 final class Achievement: Identifiable {
     @Attribute(.unique) var id: UUID
     var title: String
-    var description: String
+    var detail: String
     var unlocked: Bool
     var unlockedAt: Date?
 
     init(id: UUID = UUID(), title: String, description: String, unlocked: Bool = false, unlockedAt: Date? = nil) {
         self.id = id
         self.title = title
-        self.description = description
+        self.detail = description
         self.unlocked = unlocked
         self.unlockedAt = unlockedAt
     }
