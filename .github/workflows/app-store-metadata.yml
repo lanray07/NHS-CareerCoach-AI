@@ -1,0 +1,131 @@
+name: App Store Metadata
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  APP_STORE_APP_ID: "6773631681"
+  PRIVACY_POLICY_URL: "https://github.com/lanray07/NHS-CareerCoach-AI/blob/main/privacy-policy.md"
+
+jobs:
+  update-privacy-policy:
+    name: Update privacy policy URL
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Install API client dependencies
+        run: python3 -m pip install --quiet pyjwt cryptography requests
+
+      - name: Update App Store Connect privacy policy URL
+        env:
+          ASC_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          ASC_API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64
+          import json
+          import os
+          import time
+
+          import jwt
+          import requests
+
+          key_id = os.environ["ASC_API_KEY_ID"]
+          issuer_id = os.environ["ASC_API_ISSUER_ID"]
+          private_key = os.environ["ASC_API_PRIVATE_KEY"].strip()
+          app_id = os.environ["APP_STORE_APP_ID"]
+          privacy_policy_url = os.environ["PRIVACY_POLICY_URL"]
+
+          if "BEGIN PRIVATE KEY" not in private_key:
+              decoded = base64.b64decode(private_key).decode("utf-8")
+              if "BEGIN PRIVATE KEY" in decoded:
+                  private_key = decoded
+
+          now = int(time.time())
+          token = jwt.encode(
+              {
+                  "iss": issuer_id,
+                  "iat": now - 60,
+                  "exp": now + 20 * 60,
+                  "aud": "appstoreconnect-v1",
+              },
+              private_key,
+              algorithm="ES256",
+              headers={"kid": key_id, "typ": "JWT"},
+          )
+
+          session = requests.Session()
+          session.headers.update(
+              {
+                  "Authorization": f"Bearer {token}",
+                  "Content-Type": "application/json",
+              }
+          )
+
+          base_url = "https://api.appstoreconnect.apple.com/v1"
+          response = session.get(
+              f"{base_url}/apps/{app_id}/appInfos",
+              params={
+                  "include": "appInfoLocalizations",
+                  "fields[appInfoLocalizations]": "locale,privacyPolicyUrl,privacyChoicesUrl",
+                  "limit": "10",
+              },
+              timeout=30,
+          )
+          if response.status_code >= 400:
+              print(response.text)
+              response.raise_for_status()
+
+          payload = response.json()
+          localizations = [
+              item for item in payload.get("included", [])
+              if item.get("type") == "appInfoLocalizations"
+          ]
+          if not localizations:
+              raise RuntimeError("No appInfoLocalizations were returned for the app.")
+
+          preferred_locales = ("en-GB", "en-US")
+          selected = next(
+              (
+                  item for locale in preferred_locales
+                  for item in localizations
+                  if item.get("attributes", {}).get("locale") == locale
+              ),
+              localizations[0],
+          )
+          selected_id = selected["id"]
+          selected_locale = selected.get("attributes", {}).get("locale", "unknown")
+          existing_url = selected.get("attributes", {}).get("privacyPolicyUrl")
+          print(f"Updating appInfoLocalization {selected_id} ({selected_locale}).")
+          print(f"Existing privacyPolicyUrl: {existing_url}")
+
+          patch_response = session.patch(
+              f"{base_url}/appInfoLocalizations/{selected_id}",
+              data=json.dumps(
+                  {
+                      "data": {
+                          "type": "appInfoLocalizations",
+                          "id": selected_id,
+                          "attributes": {
+                              "privacyPolicyUrl": privacy_policy_url,
+                          },
+                      }
+                  }
+              ),
+              timeout=30,
+          )
+          if patch_response.status_code >= 400:
+              print(patch_response.text)
+              patch_response.raise_for_status()
+
+          updated = patch_response.json()["data"]["attributes"].get("privacyPolicyUrl")
+          print(f"Updated privacyPolicyUrl: {updated}")
+          if updated != privacy_policy_url:
+              raise RuntimeError("Privacy policy URL update did not round-trip.")
+          PY
