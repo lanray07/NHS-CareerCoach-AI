@@ -440,6 +440,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "NHS CareerCoach AI";
 				INFOPLIST_KEY_CFBundleIconName = AppIcon;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "NHS CareerCoach AI uses the microphone to capture mock interview answers and voice notes you choose to record.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "NHS CareerCoach AI uses speech recognition to transcribe your spoken interview practice and application notes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -473,6 +474,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "NHS CareerCoach AI";
 				INFOPLIST_KEY_CFBundleIconName = AppIcon;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "NHS CareerCoach AI uses the microphone to capture mock interview answers and voice notes you choose to record.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "NHS CareerCoach AI uses speech recognition to transcribe your spoken interview practice and application notes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
