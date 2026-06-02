@@ -173,7 +173,24 @@ jobs:
           exp="$((now + 1200))"
           header="$(printf '{"alg":"ES256","kid":"%s","typ":"JWT"}' "$ASC_API_KEY_ID" | base64url)"
           payload="$(printf '{"iss":"%s","iat":%s,"exp":%s,"aud":"appstoreconnect-v1"}' "$ASC_API_ISSUER_ID" "$now" "$exp" | base64url)"
-          signature="$(printf '%s.%s' "$header" "$payload" | openssl dgst -sha256 -sign "$ASC_KEY_PATH" -binary | base64url)"
+          signature="$(printf '%s.%s' "$header" "$payload" | openssl dgst -sha256 -sign "$ASC_KEY_PATH" -binary | python3 -c 'import base64,sys
+data=sys.stdin.buffer.read()
+if data[0] != 0x30:
+    raise SystemExit("Unexpected ECDSA signature")
+idx = 2
+if data[1] & 0x80:
+    length_bytes = data[1] & 0x7f
+    idx = 2 + length_bytes
+if data[idx] != 0x02:
+    raise SystemExit("Unexpected ECDSA r marker")
+r_len = data[idx + 1]
+r = data[idx + 2:idx + 2 + r_len].lstrip(b"\x00").rjust(32, b"\x00")
+idx = idx + 2 + r_len
+if data[idx] != 0x02:
+    raise SystemExit("Unexpected ECDSA s marker")
+s_len = data[idx + 1]
+s = data[idx + 2:idx + 2 + s_len].lstrip(b"\x00").rjust(32, b"\x00")
+print(base64.urlsafe_b64encode(r + s).rstrip(b"=").decode())')"
           token="$header.$payload.$signature"
           api_base="https://api.appstoreconnect.apple.com/v1"
 
