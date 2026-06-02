@@ -157,3 +157,68 @@ jobs:
             -authenticationKeyPath "$ASC_KEY_PATH" \
             -authenticationKeyID "$ASC_API_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_API_ISSUER_ID"
+
+      - name: Attach uploaded build to App Store version
+        env:
+          ASC_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+        run: |
+          set -euo pipefail
+
+          base64url() {
+            openssl base64 -A | tr '+/' '-_' | tr -d '='
+          }
+
+          now="$(date +%s)"
+          exp="$((now + 1200))"
+          header="$(printf '{"alg":"ES256","kid":"%s","typ":"JWT"}' "$ASC_API_KEY_ID" | base64url)"
+          payload="$(printf '{"iss":"%s","iat":%s,"exp":%s,"aud":"appstoreconnect-v1"}' "$ASC_API_ISSUER_ID" "$now" "$exp" | base64url)"
+          signature="$(printf '%s.%s' "$header" "$payload" | openssl dgst -sha256 -sign "$ASC_KEY_PATH" -binary | base64url)"
+          token="$header.$payload.$signature"
+          api_base="https://api.appstoreconnect.apple.com/v1"
+
+          api_get() {
+            curl -gfsS -H "Authorization: Bearer $token" "$api_base/$1"
+          }
+
+          api_patch() {
+            local path="$1"
+            local body="$2"
+            curl -gfsS \
+              -X PATCH \
+              -H "Authorization: Bearer $token" \
+              -H "Content-Type: application/json" \
+              -d "$body" \
+              "$api_base/$path"
+          }
+
+          app_id="$(api_get "apps?filter[bundleId]=$APP_IDENTIFIER&limit=1" | python3 -c 'import json,sys; print(json.load(sys.stdin)["data"][0]["id"])')"
+          version_id="$(api_get "apps/$app_id/appStoreVersions?filter[platform]=IOS&filter[versionString]=$MARKETING_VERSION&limit=10" | python3 -c 'import json,sys; print(json.load(sys.stdin)["data"][0]["id"])')"
+
+          build_id=""
+          processing_state=""
+          for attempt in $(seq 1 30); do
+            response="$(api_get "builds?filter[app]=$app_id&filter[version]=$BUILD_NUMBER&limit=10")"
+            build_id="$(printf '%s' "$response" | python3 -c 'import json,sys; data=json.load(sys.stdin)["data"]; print(data[0]["id"] if data else "")')"
+            processing_state="$(printf '%s' "$response" | python3 -c 'import json,sys; data=json.load(sys.stdin)["data"]; print(data[0].get("attributes", {}).get("processingState", "") if data else "")')"
+            if [ -n "$build_id" ] && [ "$processing_state" = "VALID" ]; then
+              break
+            fi
+            echo "Waiting for build $BUILD_NUMBER to become VALID in App Store Connect (attempt $attempt/30, state: ${processing_state:-not found})"
+            sleep 20
+          done
+
+          if [ -z "$build_id" ] || [ "$processing_state" != "VALID" ]; then
+            echo "::error::Build $BUILD_NUMBER was not ready to attach. Last state: ${processing_state:-not found}"
+            exit 1
+          fi
+
+          api_patch "appStoreVersions/$version_id/relationships/build" \
+            "{\"data\":{\"type\":\"builds\",\"id\":\"$build_id\"}}"
+
+          review_id="$(api_get "appStoreVersions/$version_id/appStoreReviewDetail" | python3 -c 'import json,sys; print(json.load(sys.stdin)["data"]["id"])')"
+          review_notes="NHS CareerCoach AI is an independent educational career support app for NHS and UK healthcare job applicants. It is not affiliated with the NHS and does not guarantee interviews, offers, progression or employment outcomes. No sign-in is required. App Review update for this build: Job Scanner actions now respond on iPad. Analyze processes entered advert text or a sample NHS advert if the field is empty. Upload PDF opens document import and records the selected document state. Upload screenshot opens photo selection and records the selected screenshot state. Placeholder and scaffold wording has been removed from the app interface. Suggested review path: complete onboarding, then open Dashboard, Job Scanner, Supporting Statement Builder, Voice Coach, Mock Interview, STAR Builder, Application Tracker, Readiness and Settings."
+          notes_body="$(REVIEW_NOTES="$review_notes" REVIEW_ID="$review_id" python3 -c 'import json,os; print(json.dumps({"data":{"type":"appStoreReviewDetails","id":os.environ["REVIEW_ID"],"attributes":{"notes":os.environ["REVIEW_NOTES"],"demoAccountRequired":False}}}))')"
+          api_patch "appStoreReviewDetails/$review_id" "$notes_body"
+
+          echo "Attached build $BUILD_NUMBER ($build_id) to App Store version $MARKETING_VERSION and updated App Review notes."
