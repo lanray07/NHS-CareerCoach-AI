@@ -26,7 +26,6 @@ struct SettingsView: View {
                     voiceSettings
                     notificationSettings
                     legalAndPrivacy
-                    platformPlaceholders
                     dataControls
                 }
                 .padding(20)
@@ -65,7 +64,7 @@ struct SettingsView: View {
                 }
                 .buttonStyle(PremiumPrimaryButtonStyle())
 
-                Text("StoreKit 2 purchase restoration and App Store account management should be connected before release.")
+                Text("Manage App Store subscription access and plan status.")
                     .font(.caption)
                     .foregroundStyle(CareerCoachTheme.textSecondary)
             }
@@ -73,16 +72,12 @@ struct SettingsView: View {
     }
 
     private var voiceSettings: some View {
-        PremiumDashboardCard(title: "Voice settings", subtitle: "Interview voice capture and AI voice placeholder.", systemImage: "waveform") {
-            Toggle("Voice feedback placeholder", isOn: $voiceFeedbackEnabled)
+        PremiumDashboardCard(title: "Voice settings", subtitle: "Interview voice capture and spoken coaching preferences.", systemImage: "waveform") {
+            Toggle("Voice feedback prompts", isOn: $voiceFeedbackEnabled)
                 .tint(CareerCoachTheme.electricBlue)
                 .foregroundStyle(CareerCoachTheme.textPrimary)
 
-            Text(VoicePlaybackPlaceholder().message)
-                .font(.caption)
-                .foregroundStyle(CareerCoachTheme.textSecondary)
-
-            Text(SoundEffectsPlaceholder().message)
+            Text("Use voice prompts when practising interview answers and reviewing confidence notes.")
                 .font(.caption)
                 .foregroundStyle(CareerCoachTheme.textSecondary)
         }
@@ -106,47 +101,9 @@ struct SettingsView: View {
     private var legalAndPrivacy: some View {
         PremiumDashboardCard(title: "Legal and privacy", subtitle: "Essential app disclosures.", systemImage: "doc.text.magnifyingglass") {
             VStack(alignment: .leading, spacing: 12) {
-                disclosure("Privacy policy", "Local mock AI is enabled by default. Do not store API keys in the app. Use a secure backend for remote AI.")
+                disclosure("Privacy policy", "Coaching drafts and application notes are stored locally by default. Review the privacy policy for details.")
                 disclosure("Terms of use", "The app provides educational career coaching, drafting help, and interview preparation support.")
                 disclosure("Career disclaimer", "Independent coaching platform. Not affiliated with the NHS. No guaranteed interviews, job offers, progression, or employment outcomes.")
-            }
-        }
-    }
-
-    private var platformPlaceholders: some View {
-        PremiumDashboardCard(title: "Widgets and Watch", subtitle: "Architecture placeholders for companion surfaces.", systemImage: "applewatch") {
-            VStack(alignment: .leading, spacing: 12) {
-                ForEach(WidgetPlaceholderFactory.snapshots().prefix(2)) { snapshot in
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(snapshot.kind)
-                            .font(.caption.weight(.bold))
-                            .foregroundStyle(CareerCoachTheme.electricBlue)
-                        Text("\(snapshot.title): \(snapshot.value)")
-                            .font(.headline.weight(.semibold))
-                            .foregroundStyle(CareerCoachTheme.textPrimary)
-                        Text(snapshot.caption)
-                            .font(.caption)
-                            .foregroundStyle(CareerCoachTheme.textSecondary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(12)
-                    .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(CareerCoachTheme.elevatedPanel.opacity(0.66)))
-                }
-
-                ForEach(WatchSyncPlaceholder().makeDefaultPayloads().prefix(2)) { payload in
-                    HStack(alignment: .top, spacing: 10) {
-                        Image(systemName: "applewatch.side.right")
-                            .foregroundStyle(CareerCoachTheme.electricBlue)
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text(payload.kind.rawValue)
-                                .font(.headline.weight(.semibold))
-                                .foregroundStyle(CareerCoachTheme.textPrimary)
-                            Text(payload.message)
-                                .font(.caption)
-                                .foregroundStyle(CareerCoachTheme.textSecondary)
-                        }
-                    }
-                }
             }
         }
     }

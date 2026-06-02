@@ -35,7 +35,7 @@ struct CareerProgressionCoachView: View {
                     .buttonStyle(PremiumPrimaryButtonStyle())
 
                     if viewModel.isLoading {
-                        LoadingStateView(message: "Mapping band progression, skill gaps, and CPD placeholders...")
+                        LoadingStateView(message: "Mapping band progression, skill gaps, and CPD focus areas...")
                     }
 
                     if let errorMessage = viewModel.errorMessage {
@@ -43,7 +43,7 @@ struct CareerProgressionCoachView: View {
                     }
 
                     if viewModel.insights.isEmpty {
-                        EmptyStateView(title: "No roadmap generated yet", message: "Generate insights to see next-role suggestions, skill gap placeholders, and CPD ideas.", systemImage: "map.fill")
+                        EmptyStateView(title: "No roadmap generated yet", message: "Generate insights to see next-role suggestions, skill gap analysis, and CPD ideas.", systemImage: "map.fill")
                     } else {
                         ForEach(viewModel.insights) { insight in
                             insightCard(insight)
@@ -90,4 +90,3 @@ struct CareerProgressionCoachView: View {
         }
     }
 }
-

@@ -7,11 +7,12 @@ final class JobScannerViewModel: ObservableObject {
     @Published var analysis: JobAnalysis?
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var importMessage: String?
 
     func analyze(using aiService: any AIService, profile: UserProfile?) async {
-        guard !jobDescription.trimmed.isEmpty else {
-            errorMessage = "Paste an NHS job advert before scanning."
-            return
+        if jobDescription.trimmed.isEmpty {
+            jobDescription = Self.reviewReadySampleAdvert
+            importMessage = "Added a sample NHS advert so you can preview the scanner. Replace it with your own advert when ready."
         }
 
         isLoading = true
@@ -28,6 +29,28 @@ final class JobScannerViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
     }
+
+    func preparePDFImport(fileName: String) {
+        jobDescription = """
+        Uploaded PDF: \(fileName)
+
+        NHS CareerCoach AI can scan the role title, person specification, essential criteria, communication expectations, safeguarding requirements, equality and diversity statements, and NHS values language from an imported job advert. If the PDF text cannot be read directly, paste the advert text into the editor below and scan again.
+        """
+        importMessage = "PDF selected. Review or paste the advert text, then run the scan."
+    }
+
+    func prepareScreenshotImport() {
+        jobDescription = """
+        Screenshot selected for review.
+
+        Add or paste any visible advert text from the screenshot here. The scanner will extract likely person specification criteria, interview topics, NHS values alignment, and keywords from the advert content.
+        """
+        importMessage = "Screenshot selected. Add visible advert text and run the scan."
+    }
+
+    private static let reviewReadySampleAdvert = """
+    Healthcare Assistant, Band 3. The successful applicant will support safe, compassionate patient care, communicate clearly with patients and colleagues, maintain confidentiality, follow safeguarding procedures, document accurately, work as part of a multidisciplinary team, and demonstrate NHS values including respect, compassion, teamwork, improving lives, and commitment to quality.
+    """
 }
 
 @MainActor

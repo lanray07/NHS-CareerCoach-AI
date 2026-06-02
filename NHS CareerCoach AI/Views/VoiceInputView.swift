@@ -143,7 +143,7 @@ struct VoiceInputView: View {
     }
 
     private func resultCard(_ result: VoiceProcessingResult) -> some View {
-        PremiumDashboardCard(title: "AI-polished output", subtitle: "Confidence placeholder \(Int(result.confidenceScore * 100))%", systemImage: "sparkles", accent: CareerCoachTheme.mint) {
+        PremiumDashboardCard(title: "AI-polished output", subtitle: "Confidence score \(Int(result.confidenceScore * 100))%", systemImage: "sparkles", accent: CareerCoachTheme.mint) {
             VStack(alignment: .leading, spacing: 12) {
                 Text(result.polishedOutput)
                     .font(.body)

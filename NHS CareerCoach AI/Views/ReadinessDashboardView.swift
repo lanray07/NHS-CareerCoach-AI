@@ -71,7 +71,7 @@ struct ReadinessDashboardView: View {
 
     private var charts: some View {
         VStack(spacing: 14) {
-            AnalyticsChartCard(title: "Confidence trend", subtitle: "Placeholder analytics, upgraded as interview sessions grow.") {
+            AnalyticsChartCard(title: "Confidence trend", subtitle: "Updates as interview sessions grow.") {
                 Chart(trend) { point in
                     LineMark(x: .value("Session", point.label), y: .value("Score", point.score))
                         .foregroundStyle(CareerCoachTheme.electricBlue)

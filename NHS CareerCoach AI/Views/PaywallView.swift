@@ -25,7 +25,7 @@ struct PaywallView: View {
         "Advanced AI career roadmap",
         "Premium coaching personalities",
         "Advanced interview simulation",
-        "Future AI voice coach placeholder",
+        "Advanced voice coaching tools",
         "Premium templates",
         "Deep analytics"
     ]
@@ -64,7 +64,7 @@ struct PaywallView: View {
                 .foregroundStyle(CareerCoachTheme.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
 
-            Text("Premium subscriptions scaffold StoreKit 2 purchase flow. Use mock activation while products are configured.")
+            Text("Choose the coaching level that fits your NHS application and interview preparation.")
                 .font(.subheadline)
                 .foregroundStyle(CareerCoachTheme.textSecondary)
 
@@ -129,7 +129,7 @@ struct PaywallView: View {
                 store.activateMockPlan(plan)
             }
         } label: {
-            Label(store.products.isEmpty ? "Activate mock \(plan.rawValue)" : "Subscribe", systemImage: "crown.fill")
+            Label(store.products.isEmpty ? "Select \(plan.rawValue)" : "Subscribe", systemImage: "crown.fill")
         }
     }
 

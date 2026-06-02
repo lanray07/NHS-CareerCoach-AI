@@ -23,7 +23,7 @@ struct CareerCoachWidgetSnapshot: Identifiable, Codable {
     var generatedAt: Date = .now
 }
 
-struct WidgetPlaceholderCard: View {
+struct WidgetPreviewCard: View {
     var snapshot: CareerCoachWidgetSnapshot
 
     var body: some View {
@@ -46,7 +46,7 @@ struct WidgetPlaceholderCard: View {
     }
 }
 
-enum WidgetPlaceholderFactory {
+enum WidgetPreviewFactory {
     static func snapshots() -> [CareerCoachWidgetSnapshot] {
         [
             CareerCoachWidgetSnapshot(kind: CareerCoachWidgetKind.interviewCountdown.rawValue, title: "Next interview", value: "3 days", caption: "Review values and safeguarding."),
@@ -56,4 +56,3 @@ enum WidgetPlaceholderFactory {
         ]
     }
 }
-

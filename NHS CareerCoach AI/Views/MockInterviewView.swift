@@ -141,7 +141,7 @@ struct MockInterviewView: View {
 
             feedbackRow("STAR structure", feedback.starStructureFeedback, "star.bubble.fill")
             feedbackRow("Confidence", feedback.confidenceNotes, "bolt.heart.fill")
-            feedbackRow("Filler-word placeholder", feedback.fillerWordNotes, "waveform.badge.magnifyingglass")
+            feedbackRow("Delivery notes", feedback.fillerWordNotes, "waveform.badge.magnifyingglass")
 
             VStack(alignment: .leading, spacing: 8) {
                 Text("Improvement suggestions")

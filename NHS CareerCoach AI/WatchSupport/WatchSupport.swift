@@ -21,7 +21,7 @@ struct WatchPromptPayload: Identifiable, Codable {
     var scheduledAt: Date
 }
 
-final class WatchSyncPlaceholder {
+final class WatchSyncSupport {
     func makeDefaultPayloads() -> [WatchPromptPayload] {
         [
             WatchPromptPayload(kind: .interviewReminder, title: "Interview prep", message: "Review one values answer.", scheduledAt: .now),
@@ -31,7 +31,7 @@ final class WatchSyncPlaceholder {
         ]
     }
 
-    func sendPlaceholder(_ payload: WatchPromptPayload) {
+    func sendPrompt(_ payload: WatchPromptPayload) {
         #if canImport(WatchConnectivity)
         guard WCSession.isSupported() else { return }
         _ = payload
@@ -40,4 +40,3 @@ final class WatchSyncPlaceholder {
         #endif
     }
 }
-

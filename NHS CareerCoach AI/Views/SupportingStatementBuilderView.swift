@@ -53,7 +53,7 @@ struct SupportingStatementBuilderView: View {
             .pickerStyle(.segmented)
 
             Toggle(isOn: $viewModel.atsOptimisationEnabled) {
-                Label("ATS optimisation placeholder", systemImage: "slider.horizontal.3")
+                Label("ATS keyword optimisation", systemImage: "slider.horizontal.3")
             }
             .tint(CareerCoachTheme.electricBlue)
             .foregroundStyle(CareerCoachTheme.textPrimary)

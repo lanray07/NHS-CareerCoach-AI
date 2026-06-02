@@ -27,7 +27,7 @@ final class SubscriptionStore {
             products = try await Product.products(for: productIDs)
             await refreshEntitlements()
         } catch {
-            errorMessage = "StoreKit products are scaffolded. Add matching subscription products in App Store Connect or a StoreKit configuration file."
+            errorMessage = "Subscription products are currently unavailable. Please try again later."
         }
     }
 

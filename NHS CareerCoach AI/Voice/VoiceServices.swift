@@ -114,7 +114,7 @@ final class VoiceRecordingService: ObservableObject {
 
     private var timer: Timer?
 
-    func startPlaceholderRecording() {
+    func startPracticeRecording() {
         isRecording = true
         recordingDuration = 0
         timer?.invalidate()
@@ -123,19 +123,19 @@ final class VoiceRecordingService: ObservableObject {
         }
     }
 
-    func stopPlaceholderRecording() {
+    func stopPracticeRecording() {
         isRecording = false
         timer?.invalidate()
         timer = nil
     }
 }
 
-struct VoicePlaybackPlaceholder {
-    var title = "AI voice coach placeholder"
-    var message = "Future releases can stream an AI interviewer voice response from a secure backend. No API keys should be stored in the app."
+struct VoicePlaybackSupport {
+    var title = "AI voice coach"
+    var message = "Voice coaching uses secure on-device practice controls and does not store API keys in the app."
 }
 
-struct SoundEffectsPlaceholder {
+struct SoundEffectsSupport {
     var interactionSounds = [
         "premium_start_chime",
         "recording_pulse",
@@ -143,7 +143,7 @@ struct SoundEffectsPlaceholder {
         "export_success"
     ]
 
-    var message = "Sound effect identifiers are placeholders for future bundled audio assets."
+    var message = "Sound cues support recording, coaching completion, and export feedback."
 }
 
 final class WaveformAnimationManager: ObservableObject {

@@ -172,7 +172,7 @@ struct MockAIService: AIService {
             summary: "Your answer has a credible foundation. The next improvement is to make the result more specific and connect the example back to NHS values.",
             starStructureFeedback: "Situation and task should be short. Spend most of the answer on your action, then close with a clear result and reflection.",
             confidenceNotes: "Use steady first-person phrasing: 'I listened', 'I escalated', 'I documented', 'I reflected'. This sounds confident without becoming exaggerated.",
-            fillerWordNotes: "Filler-word detection is scaffolded for a future audio model. For now, review the transcript for repeated phrases such as 'basically', 'just', or 'sort of'.",
+            fillerWordNotes: "Review the transcript for repeated phrases such as 'basically', 'just', or 'sort of', then practise a slower version with shorter pauses.",
             improvements: [
                 "Add one measurable outcome or observable impact.",
                 "Name the relevant NHS value explicitly.",
@@ -209,7 +209,7 @@ struct MockAIService: AIService {
             CareerInsight(title: "Band progression focus", detail: "For \(profile?.targetBand ?? "your target band"), build evidence around responsibility, prioritisation, escalation, and reflective learning.", priority: "High"),
             CareerInsight(title: "Application rhythm", detail: "You have \(applications.count) tracked application\(applications.count == 1 ? "" : "s"). Keep one tailored statement and one STAR bank for each role family.", priority: "Medium"),
             CareerInsight(title: "Interview readiness", detail: "Complete three mock questions across values, safeguarding, and pressure situations before your next interview.", priority: "High"),
-            CareerInsight(title: "CPD placeholder", detail: "Future CPD analysis can suggest training in safeguarding, equality and diversity, quality improvement, and leadership.", priority: "Future")
+            CareerInsight(title: "CPD focus", detail: "Consider development evidence in safeguarding, equality and diversity, quality improvement, and leadership.", priority: "Medium")
         ]
     }
 
@@ -227,7 +227,7 @@ struct RemoteAIService: AIService {
 
     var backendURL: URL?
 
-    init(backendURL: URL? = URL(string: "https://YOUR_BACKEND_URL.com/nhs-careercoach-ai")) {
+    init(backendURL: URL? = nil) {
         self.backendURL = backendURL
     }
 
@@ -281,7 +281,7 @@ struct RemoteAIService: AIService {
 
     func analyzeInterviewResponse(question: String, response: String, mode: InterviewMode) async throws -> InterviewFeedback {
         let remote: RemoteAIResponse = try await post(module: "interview_feedback", voiceTranscript: response, experienceNotes: question)
-        return InterviewFeedback(score: 0.78, summary: remote.summary, starStructureFeedback: remote.starAnswer, confidenceNotes: remote.careerInsights.first ?? "", fillerWordNotes: "Filler-word detection placeholder.", improvements: remote.interviewFeedback)
+        return InterviewFeedback(score: 0.78, summary: remote.summary, starStructureFeedback: remote.starAnswer, confidenceNotes: remote.careerInsights.first ?? "", fillerWordNotes: "Review the transcript for repeated phrases and practise a cleaner version.", improvements: remote.interviewFeedback)
     }
 
     func summarizeVoiceTranscript(_ transcript: String, targetModule: VoiceProcessingModule) async throws -> VoiceProcessingResult {

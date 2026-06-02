@@ -420,3 +420,20 @@ struct ErrorStateView: View {
         .premiumCard(cornerRadius: 16, padding: 14)
     }
 }
+
+struct InfoStateView: View {
+    var message: String
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "checkmark.seal.fill")
+                .foregroundStyle(CareerCoachTheme.mint)
+            Text(message)
+                .font(.subheadline)
+                .foregroundStyle(CareerCoachTheme.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer()
+        }
+        .premiumCard(cornerRadius: 16, padding: 14)
+    }
+}

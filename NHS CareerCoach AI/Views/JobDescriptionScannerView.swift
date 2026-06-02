@@ -1,10 +1,14 @@
 import SwiftData
 import SwiftUI
+import PhotosUI
+import UniformTypeIdentifiers
 
 struct JobDescriptionScannerView: View {
     @Environment(\.aiService) private var aiService
     @Query(sort: \UserProfile.createdAt) private var profiles: [UserProfile]
     @StateObject private var viewModel = JobScannerViewModel()
+    @State private var isShowingDocumentImporter = false
+    @State private var selectedScreenshot: PhotosPickerItem?
 
     var body: some View {
         PremiumScreen {
@@ -12,10 +16,14 @@ struct JobDescriptionScannerView: View {
                 VStack(alignment: .leading, spacing: 18) {
                     header
                     inputCard
-                    placeholderUploadCard
+                    importCard
 
                     if viewModel.isLoading {
                         LoadingStateView(message: "Scanning NHS criteria, values, and interview signals...")
+                    }
+
+                    if let importMessage = viewModel.importMessage {
+                        InfoStateView(message: importMessage)
                     }
 
                     if let errorMessage = viewModel.errorMessage {
@@ -33,11 +41,18 @@ struct JobDescriptionScannerView: View {
         }
         .navigationTitle("Job Scanner")
         .premiumNavigationTitleStyle()
+        .fileImporter(isPresented: $isShowingDocumentImporter, allowedContentTypes: [.pdf, .plainText, .rtf], allowsMultipleSelection: false) { result in
+            handleDocumentImport(result)
+        }
+        .onChange(of: selectedScreenshot) { _, item in
+            guard item != nil else { return }
+            viewModel.prepareScreenshotImport()
+        }
     }
 
     private var header: some View {
         PremiumDashboardCard(title: "Job description scanner", subtitle: "Turn an NHS advert into a focused coaching brief.", systemImage: "doc.viewfinder", accent: CareerCoachTheme.mint) {
-            Text("Mock AI extracts application criteria locally for now. Replace MockAIService with RemoteAIService when your secure backend is ready.")
+            Text("Extract person specification signals, essential criteria, interview topics, NHS values alignment, and high-value keywords from an NHS advert.")
                 .font(.subheadline)
                 .foregroundStyle(CareerCoachTheme.textSecondary)
         }
@@ -68,26 +83,45 @@ struct JobDescriptionScannerView: View {
         .premiumCard()
     }
 
-    private var placeholderUploadCard: some View {
+    private var importCard: some View {
         HStack(spacing: 12) {
-            placeholderButton("Upload PDF", "doc.richtext")
-            placeholderButton("Upload screenshot", "photo.on.rectangle")
+            Button {
+                isShowingDocumentImporter = true
+            } label: {
+                Label("Upload PDF", systemImage: "doc.richtext")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(PremiumSecondaryButtonStyle())
+
+            PhotosPicker(selection: $selectedScreenshot, matching: .images) {
+                Label("Upload screenshot", systemImage: "photo.on.rectangle")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(PremiumSecondaryButtonStyle())
         }
     }
 
-    private func placeholderButton(_ title: String, _ systemImage: String) -> some View {
-        Button { } label: {
-            Label(title, systemImage: systemImage)
-                .frame(maxWidth: .infinity)
-        }
-        .buttonStyle(PremiumSecondaryButtonStyle())
-        .disabled(true)
-        .overlay(alignment: .bottomTrailing) {
-            Text("Placeholder")
-                .font(.caption2.weight(.bold))
-                .foregroundStyle(CareerCoachTheme.textTertiary)
-                .padding(.trailing, 10)
-                .padding(.bottom, -16)
+    private func handleDocumentImport(_ result: Result<[URL], Error>) {
+        switch result {
+        case .success(let urls):
+            guard let url = urls.first else {
+                viewModel.errorMessage = "No document was selected."
+                return
+            }
+
+            if url.startAccessingSecurityScopedResource() {
+                defer { url.stopAccessingSecurityScopedResource() }
+                if let text = try? String(contentsOf: url, encoding: .utf8), !text.trimmed.isEmpty {
+                    viewModel.jobDescription = text
+                    viewModel.importMessage = "Imported text from \(url.lastPathComponent). Review it, then run the scan."
+                } else {
+                    viewModel.preparePDFImport(fileName: url.lastPathComponent)
+                }
+            } else {
+                viewModel.preparePDFImport(fileName: url.lastPathComponent)
+            }
+        case .failure(let error):
+            viewModel.errorMessage = error.localizedDescription
         }
     }
 
