@@ -13,13 +13,12 @@ permissions:
 
 env:
   APP_STORE_APP_ID: "6773631681"
-  APP_IDENTIFIER: com.nhscareercoach.app
   MARKETING_VERSION: "1.0"
   EXPECTED_BUILD_NUMBER: "11"
 
 jobs:
   submit-review:
-    name: Submit App Store review update
+    name: Diagnose App Store review update
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -27,7 +26,7 @@ jobs:
       - name: Install API client dependencies
         run: python3 -m pip install --quiet pyjwt cryptography requests
 
-      - name: Submit build to App Review
+      - name: Check App Review readiness
         env:
           ASC_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           ASC_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
@@ -77,44 +76,15 @@ jobs:
           )
           base_url = "https://api.appstoreconnect.apple.com/v1"
 
-          def request(method, path, allow_error=False, **kwargs):
+          def request(method, path, **kwargs):
               response = session.request(method, f"{base_url}/{path}", timeout=45, **kwargs)
               if response.status_code >= 400:
                   print(f"{method} /{path} -> {response.status_code}")
                   print(response.text)
-                  if allow_error:
-                      return None, response
                   response.raise_for_status()
-              if response.text:
-                  return response.json(), response
-              return {}, response
+              return response.json() if response.text else {}
 
-          def data_request(method, path, **kwargs):
-              payload, _ = request(method, path, **kwargs)
-              return payload
-
-          def print_resource(label, resource):
-              if not resource:
-                  print(f"{label}: <none>")
-                  return
-              attributes = resource.get("attributes", {})
-              safe_attrs = {
-                  key: attributes.get(key)
-                  for key in [
-                      "state",
-                      "platform",
-                      "appStoreState",
-                      "appVersionState",
-                      "versionString",
-                      "submitted",
-                      "privacyPolicyUrl",
-                      "locale",
-                  ]
-                  if key in attributes
-              }
-              print(f"{label}: id={resource.get('id')} type={resource.get('type')} attributes={json.dumps(safe_attrs, sort_keys=True)}")
-
-          versions = data_request(
+          versions = request(
               "GET",
               f"apps/{app_id}/appStoreVersions",
               params={
@@ -129,9 +99,9 @@ jobs:
           version = versions[0]
           version_id = version["id"]
           version_state = version["attributes"].get("appStoreState") or version["attributes"].get("appVersionState")
-          print(f"Using appStoreVersion {version_id}, state={version_state}")
+          print(f"App Store version: id={version_id}, state={version_state}")
 
-          build = data_request("GET", f"appStoreVersions/{version_id}/build")["data"]
+          build = request("GET", f"appStoreVersions/{version_id}/build")["data"]
           if not build:
               raise RuntimeError("No build is attached to the App Store version.")
           build_number = build["attributes"]["version"]
@@ -140,16 +110,29 @@ jobs:
           if build_number != expected_build:
               raise RuntimeError(f"Expected build {expected_build}, but version has build {build_number}.")
 
-          print("Review submission diagnostics:")
-          review_submissions = data_request(
+          review_submissions = request(
               "GET",
               f"apps/{app_id}/reviewSubmissions",
               params={"limit": "10"},
           ).get("data", [])
-          for review_submission in review_submissions:
-              print_resource("reviewSubmission", review_submission)
+          unresolved = []
+          for submission in review_submissions:
+              submission_id = submission["id"]
+              state = submission.get("attributes", {}).get("state")
+              print(f"reviewSubmission: id={submission_id}, state={state}")
+              items = request("GET", f"reviewSubmissions/{submission_id}/items").get("data", [])
+              for item in items:
+                  item_state = item.get("attributes", {}).get("state")
+                  print(f"reviewSubmissionItem: id={item['id']}, state={item_state}")
+                  if state == "UNRESOLVED_ISSUES" and item_state == "REJECTED":
+                      unresolved.append((submission_id, item["id"]))
 
-          ready_submission = next(
+          if unresolved:
+              print("App Store Connect API cannot resubmit this rejected item directly.")
+              print("Use App Store Connect > App Review > Resolve > Reply to App Review / Update Review.")
+              raise SystemExit(1)
+
+          ready = next(
               (
                   submission
                   for submission in review_submissions
@@ -157,175 +140,22 @@ jobs:
               ),
               None,
           )
-          if ready_submission:
-              target_review_submission_id = ready_submission["id"]
-          else:
-              print("No READY_FOR_REVIEW draft submission found; creating one.")
-              created_submission = data_request(
-                  "POST",
-                  "reviewSubmissions",
-                  data=json.dumps(
-                      {
-                          "data": {
-                              "type": "reviewSubmissions",
-                              "relationships": {
-                                  "app": {
-                                      "data": {
-                                          "type": "apps",
-                                          "id": app_id,
-                                      }
-                                  }
-                              },
-                          }
-                      }
-                  ),
-              )["data"]
-              print_resource("created reviewSubmission", created_submission)
-              target_review_submission_id = created_submission["id"]
+          if not ready:
+              raise RuntimeError("No READY_FOR_REVIEW submission is available.")
 
-          print(f"Using target reviewSubmission {target_review_submission_id}")
-
-          target_has_version_item = False
-          unresolved_submission_id = None
-          for review_submission in review_submissions:
-              submission_id = review_submission["id"]
-              submission_state = review_submission.get("attributes", {}).get("state")
-              if submission_state == "UNRESOLVED_ISSUES":
-                  unresolved_submission_id = submission_id
-              items_payload, items_response = request("GET", f"reviewSubmissions/{submission_id}/items", allow_error=True)
-              if not items_payload:
-                  print(f"Unable to list review submission items for {submission_id}: HTTP {items_response.status_code}")
-                  continue
-
-              for item in items_payload.get("data", []):
-                  print_resource(f"reviewSubmissionItem in {submission_id}", item)
-                  item_id = item["id"]
-                  item_state = item.get("attributes", {}).get("state")
-                  if submission_id == target_review_submission_id:
-                      target_has_version_item = True
-                  elif item_state in {"REJECTED", "DEVELOPER_REJECTED"}:
-                      print(f"Trying to mark rejected reviewSubmissionItem {item_id} ready again in submission {submission_id}")
-                      item_update_payload, item_update_response = request(
-                          "PATCH",
-                          f"reviewSubmissionItems/{item_id}",
-                          allow_error=True,
-                          data=json.dumps(
-                              {
-                                  "data": {
-                                      "type": "reviewSubmissionItems",
-                                      "id": item_id,
-                                      "attributes": {
-                                          "state": "READY_FOR_REVIEW",
-                                      },
-                                  }
-                              }
-                          ),
-                      )
-                      if item_update_payload:
-                          print_resource("updated reviewSubmissionItem", item_update_payload["data"])
-                          target_review_submission_id = submission_id
-                          target_has_version_item = True
-                      else:
-                          print(f"Unable to mark reviewSubmissionItem ready again: HTTP {item_update_response.status_code}")
-
-          if not target_has_version_item:
-              print(f"Adding appStoreVersion {version_id} to reviewSubmission {target_review_submission_id}")
-              created_item_payload, created_item_response = request(
-                  "POST",
-                  "reviewSubmissionItems",
-                  allow_error=True,
-                  data=json.dumps(
-                      {
-                          "data": {
-                              "type": "reviewSubmissionItems",
-                              "relationships": {
-                                  "appStoreVersion": {
-                                      "data": {
-                                          "type": "appStoreVersions",
-                                          "id": version_id,
-                                      }
-                                  },
-                                  "reviewSubmission": {
-                                      "data": {
-                                          "type": "reviewSubmissions",
-                                          "id": target_review_submission_id,
-                                      }
-                                  },
-                              },
-                          }
-                      }
-                  ),
-              )
-              if created_item_payload:
-                  print_resource("created reviewSubmissionItem", created_item_payload["data"])
-              else:
-                  raise RuntimeError(f"Unable to add app version to review submission. HTTP {created_item_response.status_code}.")
-
-          app_infos = data_request("GET", f"apps/{app_id}/appInfos", params={"limit": "10"}).get("data", [])
-          for app_info in app_infos:
-              print_resource("appInfo", app_info)
-              localizations_payload, localizations_response = request(
-                  "GET",
-                  f"appInfos/{app_info['id']}/appInfoLocalizations",
-                  allow_error=True,
-              )
-              if localizations_payload:
-                  for localization in localizations_payload.get("data", []):
-                      print_resource("appInfoLocalization", localization)
-              else:
-                  print(f"Unable to list app info localizations: HTTP {localizations_response.status_code}")
-
-          print(f"Submitting reviewSubmission {target_review_submission_id}")
-
-          submit_body = json.dumps(
-              {
-                  "data": {
-                      "type": "reviewSubmissions",
-                      "id": target_review_submission_id,
-                      "attributes": {"submitted": True},
-                  }
-              }
-          )
-          submitted_payload, submitted_response = request(
+          ready_id = ready["id"]
+          submitted = request(
               "PATCH",
-              f"reviewSubmissions/{target_review_submission_id}",
-              allow_error=True,
-              data=submit_body,
-          )
-          if submitted_payload:
-              submitted = submitted_payload["data"]
-              print(f"Submitted reviewSubmission {submitted['id']} with state={submitted['attributes'].get('state')}")
-              raise SystemExit(0)
-
-          print("ReviewSubmission submit failed; trying AppStoreVersionSubmission fallback.")
-          legacy_payload, legacy_response = request(
-              "POST",
-              "appStoreVersionSubmissions",
-              allow_error=True,
+              f"reviewSubmissions/{ready_id}",
               data=json.dumps(
                   {
                       "data": {
-                          "type": "appStoreVersionSubmissions",
-                          "relationships": {
-                              "appStoreVersion": {
-                                  "data": {
-                                      "type": "appStoreVersions",
-                                      "id": version_id,
-                                  }
-                              }
-                          },
+                          "type": "reviewSubmissions",
+                          "id": ready_id,
+                          "attributes": {"submitted": True},
                       }
                   }
               ),
-          )
-          if legacy_payload:
-              submitted = legacy_payload["data"]
-              print(f"Submitted appStoreVersionSubmission {submitted['id']} with state={submitted['attributes'].get('state')}")
-              raise SystemExit(0)
-
-          raise RuntimeError(
-              "App Store Connect rejected both submission APIs. "
-              f"ReviewSubmission HTTP {submitted_response.status_code}; "
-              f"AppStoreVersionSubmission HTTP {legacy_response.status_code}."
-          )
+          )["data"]
+          print(f"Submitted reviewSubmission {submitted['id']} with state={submitted['attributes'].get('state')}")
           PY
