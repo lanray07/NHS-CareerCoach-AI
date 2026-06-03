@@ -186,8 +186,12 @@ jobs:
           print(f"Using target reviewSubmission {target_review_submission_id}")
 
           target_has_version_item = False
+          unresolved_submission_id = None
           for review_submission in review_submissions:
               submission_id = review_submission["id"]
+              submission_state = review_submission.get("attributes", {}).get("state")
+              if submission_state == "UNRESOLVED_ISSUES":
+                  unresolved_submission_id = submission_id
               items_payload, items_response = request("GET", f"reviewSubmissions/{submission_id}/items", allow_error=True)
               if not items_payload:
                   print(f"Unable to list review submission items for {submission_id}: HTTP {items_response.status_code}")
@@ -200,8 +204,29 @@ jobs:
                   if submission_id == target_review_submission_id:
                       target_has_version_item = True
                   elif item_state in {"REJECTED", "DEVELOPER_REJECTED"}:
-                      print(f"Removing rejected reviewSubmissionItem {item_id} from stale submission {submission_id}")
-                      request("DELETE", f"reviewSubmissionItems/{item_id}")
+                      print(f"Trying to mark rejected reviewSubmissionItem {item_id} ready again in submission {submission_id}")
+                      item_update_payload, item_update_response = request(
+                          "PATCH",
+                          f"reviewSubmissionItems/{item_id}",
+                          allow_error=True,
+                          data=json.dumps(
+                              {
+                                  "data": {
+                                      "type": "reviewSubmissionItems",
+                                      "id": item_id,
+                                      "attributes": {
+                                          "state": "READY_FOR_REVIEW",
+                                      },
+                                  }
+                              }
+                          ),
+                      )
+                      if item_update_payload:
+                          print_resource("updated reviewSubmissionItem", item_update_payload["data"])
+                          target_review_submission_id = submission_id
+                          target_has_version_item = True
+                      else:
+                          print(f"Unable to mark reviewSubmissionItem ready again: HTTP {item_update_response.status_code}")
 
           if not target_has_version_item:
               print(f"Adding appStoreVersion {version_id} to reviewSubmission {target_review_submission_id}")
