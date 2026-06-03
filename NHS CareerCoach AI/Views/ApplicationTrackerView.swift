@@ -43,7 +43,7 @@ struct ApplicationTrackerView: View {
     }
 
     private var summary: some View {
-        PremiumDashboardCard(title: "Application tracker", subtitle: "A premium pipeline for NHS applications and interviews.", systemImage: "tray.full.fill", accent: CareerCoachTheme.mint) {
+        PremiumDashboardCard(title: "Application tracker", subtitle: "A focused pipeline for NHS applications and interviews.", systemImage: "tray.full.fill", accent: CareerCoachTheme.mint) {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                 MetricPill(title: "Drafting", value: "\(count(.drafting))", systemImage: "square.and.pencil", tint: CareerCoachTheme.warning)
                 MetricPill(title: "Submitted", value: "\(count(.submitted))", systemImage: "paperplane.fill", tint: CareerCoachTheme.electricBlue)

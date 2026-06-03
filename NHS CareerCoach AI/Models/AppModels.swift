@@ -75,31 +75,10 @@ enum ApplicationStatus: String, CaseIterable, Codable, Identifiable {
     }
 }
 
-enum SubscriptionPlan: String, CaseIterable, Codable, Identifiable {
-    case free = "Free"
-    case premiumMonthly = "Premium Monthly"
-    case premiumYearly = "Premium Yearly"
-    case eliteMonthly = "Elite Monthly"
+enum AccessPlan: String, CaseIterable, Codable, Identifiable {
+    case included = "Included Access"
 
     var id: String { rawValue }
-
-    var price: String {
-        switch self {
-        case .free: return "£0"
-        case .premiumMonthly: return "£12.99"
-        case .premiumYearly: return "£99.99"
-        case .eliteMonthly: return "£24.99"
-        }
-    }
-
-    var productID: String? {
-        switch self {
-        case .free: return nil
-        case .premiumMonthly: return "nhs_careercoach_ai_premium_monthly"
-        case .premiumYearly: return "nhs_careercoach_ai_premium_yearly"
-        case .eliteMonthly: return "nhs_careercoach_ai_elite_monthly"
-        }
-    }
 }
 
 enum InterviewMode: String, CaseIterable, Codable, Identifiable {
@@ -323,13 +302,13 @@ final class Achievement: Identifiable {
 }
 
 @Model
-final class SubscriptionState: Identifiable {
+final class AccessState: Identifiable {
     @Attribute(.unique) var id: UUID
     var plan: String
     var isActive: Bool
     var renewsAt: Date?
 
-    init(id: UUID = UUID(), plan: SubscriptionPlan = .free, isActive: Bool = false, renewsAt: Date? = nil) {
+    init(id: UUID = UUID(), plan: AccessPlan = .included, isActive: Bool = true, renewsAt: Date? = nil) {
         self.id = id
         self.plan = plan.rawValue
         self.isActive = isActive

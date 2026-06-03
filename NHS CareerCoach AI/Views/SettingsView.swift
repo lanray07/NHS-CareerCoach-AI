@@ -5,7 +5,7 @@ struct SettingsView: View {
     @Environment(AppState.self) private var appState
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \UserProfile.createdAt) private var profiles: [UserProfile]
-    @Query private var subscriptions: [SubscriptionState]
+    @Query private var accessStates: [AccessState]
     @Query private var applications: [JobApplication]
     @Query private var statements: [SupportingStatement]
     @Query private var starAnswers: [STARAnswer]
@@ -22,7 +22,7 @@ struct SettingsView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     accountCard
-                    subscriptionCard
+                    accessCard
                     voiceSettings
                     notificationSettings
                     legalAndPrivacy
@@ -56,15 +56,15 @@ struct SettingsView: View {
         }
     }
 
-    private var subscriptionCard: some View {
-        PremiumDashboardCard(title: "Subscription", subtitle: subscriptionLabel, systemImage: "crown.fill", accent: CareerCoachTheme.gold) {
+    private var accessCard: some View {
+        PremiumDashboardCard(title: "App access", subtitle: "Included in this build", systemImage: "checkmark.seal.fill", accent: CareerCoachTheme.gold) {
             VStack(alignment: .leading, spacing: 12) {
                 NavigationLink(value: AppRoute.paywall) {
-                    Label("Manage subscription", systemImage: "creditcard.fill")
+                    Label("View included access", systemImage: "checkmark.seal.fill")
                 }
                 .buttonStyle(PremiumPrimaryButtonStyle())
 
-                Text("Manage App Store subscription access and plan status.")
+                Text("This submitted version does not sell digital purchases.")
                     .font(.caption)
                     .foregroundStyle(CareerCoachTheme.textSecondary)
             }
@@ -101,7 +101,7 @@ struct SettingsView: View {
     private var legalAndPrivacy: some View {
         PremiumDashboardCard(title: "Legal and privacy", subtitle: "Essential app disclosures.", systemImage: "doc.text.magnifyingglass") {
             VStack(alignment: .leading, spacing: 12) {
-                disclosure("Privacy policy", "Coaching drafts and application notes are stored locally by default. Review the privacy policy for details.")
+                disclosure("Privacy policy", "Coaching drafts, application notes, and voice transcripts are stored locally by default. This build does not send personal data to a developer AI server or third-party AI provider.")
                 disclosure("Terms of use", "The app provides educational career coaching, drafting help, and interview preparation support.")
                 disclosure("Career disclaimer", "Independent coaching platform. Not affiliated with the NHS. No guaranteed interviews, job offers, progression, or employment outcomes.")
             }
@@ -152,11 +152,6 @@ struct SettingsView: View {
         }
     }
 
-    private var subscriptionLabel: String {
-        guard let subscription = subscriptions.first else { return "Free plan" }
-        return subscription.isActive ? subscription.plan : "Free plan"
-    }
-
     private var exportSummaryText: String {
         """
         NHS CareerCoach AI export summary
@@ -179,7 +174,7 @@ struct SettingsView: View {
         sessions.forEach { modelContext.delete($0) }
         transcripts.forEach { modelContext.delete($0) }
         achievements.forEach { modelContext.delete($0) }
-        subscriptions.forEach { modelContext.delete($0) }
+        accessStates.forEach { modelContext.delete($0) }
         try? modelContext.save()
         appState.resetOnboardingFlag()
     }

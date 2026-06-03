@@ -12,7 +12,7 @@ struct ShareCardsView: View {
         PremiumScreen {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
-                    PremiumDashboardCard(title: "Premium share cards", subtitle: "Elegant milestone cards for confidence, progress, and reflection.", systemImage: "square.and.arrow.up", accent: CareerCoachTheme.gold) {
+                    PremiumDashboardCard(title: "Share cards", subtitle: "Elegant milestone cards for confidence, progress, and reflection.", systemImage: "square.and.arrow.up", accent: CareerCoachTheme.gold) {
                         Text("Share cards are designed as personal milestones. They should not imply guaranteed NHS outcomes.")
                             .font(.subheadline)
                             .foregroundStyle(CareerCoachTheme.textSecondary)
@@ -43,4 +43,3 @@ private struct ShareCard: Identifiable {
     var detail: String
     var symbol: String
 }
-

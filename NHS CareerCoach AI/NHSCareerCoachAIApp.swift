@@ -14,7 +14,7 @@ struct NHSCareerCoachAIApp: App {
             MockInterviewSession.self,
             VoiceTranscript.self,
             Achievement.self,
-            SubscriptionState.self
+            AccessState.self
         ])
 
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
@@ -36,4 +36,3 @@ struct NHSCareerCoachAIApp: App {
         }
     }
 }
-

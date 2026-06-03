@@ -44,7 +44,7 @@ struct VoiceInputView: View {
 
     private var header: some View {
         PremiumDashboardCard(title: "Speech-to-text voice input", subtitle: "Dictate experiences, STAR examples, mock answers, or statement ideas.", systemImage: "waveform", accent: CareerCoachTheme.electricBlue) {
-            Text("Live transcription stays editable. Mock AI can then polish your transcript into NHS-style application content.")
+            Text("Live transcription stays editable. Local coaching can then polish your transcript into NHS-style application content.")
                 .font(.subheadline)
                 .foregroundStyle(CareerCoachTheme.textSecondary)
         }

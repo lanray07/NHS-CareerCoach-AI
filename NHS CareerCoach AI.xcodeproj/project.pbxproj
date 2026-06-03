@@ -12,7 +12,7 @@
 		A00000000000000000000003 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000004 /* AppState.swift */; };
 		A00000000000000000000004 /* FeatureViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000005 /* FeatureViewModels.swift */; };
 		A00000000000000000000005 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000006 /* AIService.swift */; };
-		A00000000000000000000006 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000007 /* SubscriptionService.swift */; };
+		A00000000000000000000006 /* AccessService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000007 /* AccessService.swift */; };
 		A00000000000000000000007 /* PDFExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000008 /* PDFExportService.swift */; };
 		A00000000000000000000008 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000009 /* NotificationService.swift */; };
 		A00000000000000000000009 /* PremiumTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000010 /* PremiumTheme.swift */; };
@@ -46,7 +46,7 @@
 		B00000000000000000000004 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		B00000000000000000000005 /* FeatureViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureViewModels.swift; sourceTree = "<group>"; };
 		B00000000000000000000006 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
-		B00000000000000000000007 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
+		B00000000000000000000007 /* AccessService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessService.swift; sourceTree = "<group>"; };
 		B00000000000000000000008 /* PDFExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportService.swift; sourceTree = "<group>"; };
 		B00000000000000000000009 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		B00000000000000000000010 /* PremiumTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumTheme.swift; sourceTree = "<group>"; };
@@ -160,7 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				B00000000000000000000006 /* AIService.swift */,
-				B00000000000000000000007 /* SubscriptionService.swift */,
+				B00000000000000000000007 /* AccessService.swift */,
 				B00000000000000000000008 /* PDFExportService.swift */,
 				B00000000000000000000009 /* NotificationService.swift */,
 			);
@@ -284,7 +284,7 @@
 				A00000000000000000000003 /* AppState.swift in Sources */,
 				A00000000000000000000004 /* FeatureViewModels.swift in Sources */,
 				A00000000000000000000005 /* AIService.swift in Sources */,
-				A00000000000000000000006 /* SubscriptionService.swift in Sources */,
+				A00000000000000000000006 /* AccessService.swift in Sources */,
 				A00000000000000000000007 /* PDFExportService.swift in Sources */,
 				A00000000000000000000008 /* NotificationService.swift in Sources */,
 				A00000000000000000000009 /* PremiumTheme.swift in Sources */,

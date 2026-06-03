@@ -329,14 +329,14 @@ struct ShareCardPreview: View {
 }
 
 struct UpgradeBanner: View {
-    var title: String = "Unlock premium coaching"
-    var message: String = "Voice interviews, advanced statements, export packs, analytics, and deeper career roadmaps."
+    var title: String = "Included coaching studio"
+    var message: String = "Voice interviews, statement drafts, export packs, analytics, and career roadmaps are available in this build."
     var route: AppRoute = .paywall
 
     var body: some View {
         NavigationLink(value: route) {
             HStack(spacing: 14) {
-                Image(systemName: "crown.fill")
+                Image(systemName: "checkmark.seal.fill")
                     .foregroundStyle(CareerCoachTheme.gold)
                     .frame(width: 42, height: 42)
                     .background(Circle().fill(CareerCoachTheme.gold.opacity(0.14)))

@@ -45,7 +45,7 @@ struct OnboardingView: View {
                     Text("NHS CareerCoach AI")
                         .font(.system(size: 34, weight: .black, design: .rounded))
                         .foregroundStyle(.white)
-                    Text("The premium AI career coach for NHS applicants.")
+                    Text("AI career coaching for NHS applicants.")
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(CareerCoachTheme.textSecondary)
                 }
@@ -86,7 +86,7 @@ struct OnboardingView: View {
     }
 
     private var backgroundStep: some View {
-        OnboardingPanel(title: "Shape your coaching profile", subtitle: "Your background helps the mock AI suggest relevant examples without claiming outcomes.") {
+        OnboardingPanel(title: "Shape your coaching profile", subtitle: "Your background helps the local coaching service suggest relevant examples without claiming outcomes.") {
             picker("Healthcare background", selection: $healthcareBackground, values: HealthcareBackground.allCases)
             picker("Preferred coaching style", selection: $coachingStyle, values: CoachingStyle.allCases)
         }
@@ -104,6 +104,7 @@ struct OnboardingView: View {
             disclaimerRow("Independent coaching platform", "This app is not affiliated with, endorsed by, or operated by the NHS.")
             disclaimerRow("No guaranteed outcomes", "It does not guarantee interviews, job offers, progression, or employment outcomes.")
             disclaimerRow("Review before submission", "AI suggestions should be checked, personalised, and kept accurate before use.")
+            disclaimerRow("Local-first AI in this build", "Job descriptions, notes, answers, and transcripts are not sent to a developer server or third-party AI provider.")
         }
     }
 
@@ -175,7 +176,7 @@ struct OnboardingView: View {
         )
 
         modelContext.insert(profile)
-        modelContext.insert(SubscriptionState())
+        modelContext.insert(AccessState())
         try? modelContext.save()
         appState.completeOnboarding()
     }

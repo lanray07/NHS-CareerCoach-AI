@@ -5,7 +5,6 @@ struct DashboardView: View {
     @Query(sort: \JobApplication.createdAt, order: .reverse) private var applications: [JobApplication]
     @Query(sort: \MockInterviewSession.createdAt, order: .reverse) private var sessions: [MockInterviewSession]
     @Query(sort: \SupportingStatement.createdAt, order: .reverse) private var statements: [SupportingStatement]
-    @Query private var subscriptions: [SubscriptionState]
     @Query(sort: \UserProfile.createdAt) private var profiles: [UserProfile]
 
     private var readinessScore: Double {
@@ -35,7 +34,7 @@ struct DashboardView: View {
         VStack(alignment: .leading, spacing: 18) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Premium NHS application coaching")
+                    Text("NHS application coaching")
                         .font(.caption.weight(.bold))
                         .foregroundStyle(CareerCoachTheme.mint)
                         .textCase(.uppercase)
@@ -53,9 +52,9 @@ struct DashboardView: View {
             }
 
             HStack {
-                Label("Mock AI enabled", systemImage: "sparkles")
+                Label("Local AI coaching enabled", systemImage: "lock.shield.fill")
                 Spacer()
-                Text(subscriptionLabel)
+                Text("No purchase required")
             }
             .font(.caption.weight(.semibold))
             .foregroundStyle(CareerCoachTheme.textSecondary)
@@ -73,7 +72,7 @@ struct DashboardView: View {
     }
 
     private var quickActions: some View {
-        PremiumDashboardCard(title: "Quick actions", subtitle: "Premium workflows for application momentum.", systemImage: "bolt.fill") {
+        PremiumDashboardCard(title: "Quick actions", subtitle: "Focused workflows for application momentum.", systemImage: "bolt.fill") {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
                 quickAction("Scan Job Description", "doc.viewfinder", .jobScanner)
                 quickAction("Supporting Statement", "text.badge.star", .supportingStatement)
@@ -159,11 +158,6 @@ struct DashboardView: View {
     private var profileTitle: String {
         guard let profile = profiles.first else { return "Prepare with executive-level clarity." }
         return "Targeting \(profile.targetRole), Band \(profile.targetBand)"
-    }
-
-    private var subscriptionLabel: String {
-        guard let state = subscriptions.first else { return "Free plan" }
-        return state.isActive ? state.plan : "Free plan"
     }
 
     private var valuesScore: Double {
