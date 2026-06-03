@@ -8,7 +8,8 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT_DIR = ROOT / "screenshots" / "ipad-13"
+IPAD_OUT_DIR = ROOT / "screenshots" / "ipad-13"
+IPHONE_OUT_DIR = ROOT / "screenshots" / "iphone-6.5"
 SOURCE_BACKGROUND = ROOT / "source" / "human-healthcare-background.png"
 FONT_REGULAR = Path("C:/Windows/Fonts/segoeui.ttf")
 FONT_BOLD = Path("C:/Windows/Fonts/segoeuib.ttf")
@@ -71,7 +72,7 @@ SPECS = [
         (
             ("Live", "Speech-to-text transcription", "Pause, resume and refine your experience"),
             ("AI", "Polished supporting statement", "Cleaner structure and stronger verbs"),
-            ("Score", "Confidence feedback", "Filler-word and clarity placeholders"),
+            ("Score", "Confidence feedback", "Clarity, pacing and structure notes"),
             ("Save", "Reusable evidence bank", "Keep examples for future applications"),
         ),
         "When a patient became anxious, I listened carefully, explained the next steps...",
@@ -176,18 +177,18 @@ SPECS = [
     ),
     ScreenshotSpec(
         "10-premium-paywall.png",
-        "Premium Membership",
-        "Unlock the full AI coaching studio.",
-        "Premium and Elite plans unlock voice interviews, unlimited coaching, exports and analytics.",
-        "Premium Plans",
+        "Included Access",
+        "Career coaching tools, no purchase required.",
+        "This submitted build includes the visible coaching workflows for review and user evaluation.",
+        "Included Tools",
         (
-            ("Premium Monthly", "GBP 12.99", "Voice + statements + analytics"),
-            ("Premium Yearly", "GBP 99.99", "Best annual value"),
-            ("Elite Monthly", "GBP 24.99", "Deep roadmap + future voice coach"),
-            ("Disclaimer", "Educational coaching only", "No guaranteed interviews or job offers"),
+            ("Access", "Included", "No digital purchase is sold in this build"),
+            ("Local AI", "On-device workflow", "Drafts and answers stay local by default"),
+            ("Voice", "Apple permission", "Speech-to-text only when the user chooses"),
+            ("Privacy", "Clear disclosure", "No developer AI server or third-party AI provider"),
         ),
         "Independent coaching platform. Not affiliated with the NHS.",
-        "Upgrade",
+        "View Included Tools",
         None,
     ),
 ]
@@ -373,7 +374,7 @@ def draw_content(draw: ImageDraw.ImageDraw, spec: ScreenshotSpec) -> None:
     draw.text((1024 - text_width / 2, 2314), spec.cta, font=font(30, True), fill=(248, 252, 255, 255))
 
 
-def render(spec: ScreenshotSpec) -> None:
+def render(spec: ScreenshotSpec, out_dir: Path = IPAD_OUT_DIR, size: tuple[int, int] = SIZE) -> None:
     canvas = Image.new("RGBA", SIZE, (0, 0, 0, 255))
     draw_background(canvas)
     draw = ImageDraw.Draw(canvas, "RGBA")
@@ -381,8 +382,10 @@ def render(spec: ScreenshotSpec) -> None:
     draw_text_block(draw, spec)
     draw_tablet_frame(draw)
     draw_content(draw, spec)
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    canvas.convert("RGB").save(OUT_DIR / spec.filename, "PNG", optimize=True)
+    if size != SIZE:
+        canvas = canvas.resize(size, Image.Resampling.LANCZOS)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    canvas.convert("RGB").save(out_dir / spec.filename, "PNG", optimize=True)
 
 
 def update_manifest() -> None:
@@ -400,6 +403,7 @@ def update_manifest() -> None:
 def main(specs: Iterable[ScreenshotSpec] = SPECS) -> None:
     for spec in specs:
         render(spec)
+        render(spec, IPHONE_OUT_DIR, (1242, 2688))
     update_manifest()
 
 

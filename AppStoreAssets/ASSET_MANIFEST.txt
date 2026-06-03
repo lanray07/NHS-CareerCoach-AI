@@ -2,8 +2,6 @@ NHS CareerCoach AI App Store Assets
 
 Screenshots: AppStoreAssets/screenshots/iphone-6.5 - 10 PNG files, 1242 x 2688 px, RGB, 72 dpi, premium healthcare-professional background treatment.
 iPad screenshots: AppStoreAssets/screenshots/ipad-13 - 10 PNG files, 2048 x 2732 px, RGB, 72 dpi, premium tablet-specific healthcare career coaching layouts.
-Subscription promotional images: AppStoreAssets/subscription-promotional-images - 3 PNG files, 1024 x 1024 px, RGB, 72 dpi, diverse nurses, doctors and healthcare professionals in a dark premium coaching composition.
-Subscription review screenshots: AppStoreAssets/subscription-review-screenshots - 3 PNG files, 1242 x 2688 px, RGB, 72 dpi, humanized review-ready paywall visuals.
 Source background: AppStoreAssets/source/human-healthcare-background.png - generated original premium healthcare-professional composition, with no readable logos or NHS marks.
 
 Note: Visuals use an original generated healthcare-professional background with varied skin tones, nurse/doctor/professional cues, and no NHS affiliation or guaranteed employment outcome claims.
