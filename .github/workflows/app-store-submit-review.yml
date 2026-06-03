@@ -1,0 +1,170 @@
+name: App Store Submit Review
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/app-review-submit-trigger"
+
+permissions:
+  contents: read
+
+env:
+  APP_STORE_APP_ID: "6773631681"
+  APP_IDENTIFIER: com.nhscareercoach.app
+  MARKETING_VERSION: "1.0"
+  EXPECTED_BUILD_NUMBER: "11"
+
+jobs:
+  submit-review:
+    name: Submit App Store review update
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Install API client dependencies
+        run: python3 -m pip install --quiet pyjwt cryptography requests
+
+      - name: Submit build to App Review
+        env:
+          ASC_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          ASC_API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64
+          import json
+          import os
+          import time
+
+          import jwt
+          import requests
+
+          key_id = os.environ["ASC_API_KEY_ID"]
+          issuer_id = os.environ["ASC_API_ISSUER_ID"]
+          private_key = os.environ["ASC_API_PRIVATE_KEY"].strip()
+          app_id = os.environ["APP_STORE_APP_ID"]
+          marketing_version = os.environ["MARKETING_VERSION"]
+          expected_build = os.environ["EXPECTED_BUILD_NUMBER"]
+
+          if "BEGIN PRIVATE KEY" not in private_key:
+              decoded = base64.b64decode(private_key).decode("utf-8")
+              if "BEGIN PRIVATE KEY" in decoded:
+                  private_key = decoded
+
+          now = int(time.time())
+          token = jwt.encode(
+              {
+                  "iss": issuer_id,
+                  "iat": now - 60,
+                  "exp": now + 20 * 60,
+                  "aud": "appstoreconnect-v1",
+              },
+              private_key,
+              algorithm="ES256",
+              headers={"kid": key_id, "typ": "JWT"},
+          )
+
+          session = requests.Session()
+          session.headers.update(
+              {
+                  "Authorization": f"Bearer {token}",
+                  "Content-Type": "application/json",
+              }
+          )
+          base_url = "https://api.appstoreconnect.apple.com/v1"
+
+          def request(method, path, **kwargs):
+              response = session.request(method, f"{base_url}/{path}", timeout=45, **kwargs)
+              if response.status_code >= 400:
+                  print(f"{method} /{path} -> {response.status_code}")
+                  print(response.text)
+                  response.raise_for_status()
+              if response.text:
+                  return response.json()
+              return {}
+
+          versions = request(
+              "GET",
+              "appStoreVersions",
+              params={
+                  "filter[app]": app_id,
+                  "filter[platform]": "IOS",
+                  "filter[versionString]": marketing_version,
+                  "limit": "10",
+              },
+          )["data"]
+          if not versions:
+              raise RuntimeError(f"No iOS App Store version {marketing_version} found.")
+
+          version = versions[0]
+          version_id = version["id"]
+          version_state = version["attributes"].get("appStoreState") or version["attributes"].get("appVersionState")
+          print(f"Using appStoreVersion {version_id}, state={version_state}")
+
+          build = request("GET", f"appStoreVersions/{version_id}/build")["data"]
+          if not build:
+              raise RuntimeError("No build is attached to the App Store version.")
+          build_number = build["attributes"]["version"]
+          processing_state = build["attributes"].get("processingState")
+          print(f"Attached build: {build_number}, processingState={processing_state}")
+          if build_number != expected_build:
+              raise RuntimeError(f"Expected build {expected_build}, but version has build {build_number}.")
+
+          review_submission = request(
+              "POST",
+              "reviewSubmissions",
+              data=json.dumps(
+                  {
+                      "data": {
+                          "type": "reviewSubmissions",
+                          "attributes": {"platform": "IOS"},
+                          "relationships": {
+                              "app": {"data": {"type": "apps", "id": app_id}}
+                          },
+                      }
+                  }
+              ),
+          )["data"]
+          review_submission_id = review_submission["id"]
+          print(f"Created reviewSubmission {review_submission_id}")
+
+          item = request(
+              "POST",
+              "reviewSubmissionItems",
+              data=json.dumps(
+                  {
+                      "data": {
+                          "type": "reviewSubmissionItems",
+                          "relationships": {
+                              "reviewSubmission": {
+                                  "data": {"type": "reviewSubmissions", "id": review_submission_id}
+                              },
+                              "appStoreVersion": {
+                                  "data": {"type": "appStoreVersions", "id": version_id}
+                              },
+                          },
+                      }
+                  }
+              ),
+          )["data"]
+          print(f"Created reviewSubmissionItem {item['id']}")
+
+          submitted = request(
+              "PATCH",
+              f"reviewSubmissions/{review_submission_id}",
+              data=json.dumps(
+                  {
+                      "data": {
+                          "type": "reviewSubmissions",
+                          "id": review_submission_id,
+                          "attributes": {"submitted": True},
+                      }
+                  }
+              ),
+          )["data"]
+          print(f"Submitted reviewSubmission {submitted['id']} with state={submitted['attributes'].get('state')}")
+          PY
