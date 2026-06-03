@@ -16,6 +16,7 @@ env:
   APP_IDENTIFIER: com.nhscareercoach.app
   MARKETING_VERSION: "1.0"
   EXPECTED_BUILD_NUMBER: "11"
+  REVIEW_SUBMISSION_ID: ab8003e3-1d41-49d6-b53c-2ebe75de759d
 
 jobs:
   submit-review:
@@ -113,44 +114,8 @@ jobs:
           if build_number != expected_build:
               raise RuntimeError(f"Expected build {expected_build}, but version has build {build_number}.")
 
-          review_submission = request(
-              "POST",
-              "reviewSubmissions",
-              data=json.dumps(
-                  {
-                      "data": {
-                          "type": "reviewSubmissions",
-                          "attributes": {"platform": "IOS"},
-                          "relationships": {
-                              "app": {"data": {"type": "apps", "id": app_id}}
-                          },
-                      }
-                  }
-              ),
-          )["data"]
-          review_submission_id = review_submission["id"]
-          print(f"Created reviewSubmission {review_submission_id}")
-
-          item = request(
-              "POST",
-              "reviewSubmissionItems",
-              data=json.dumps(
-                  {
-                      "data": {
-                          "type": "reviewSubmissionItems",
-                          "relationships": {
-                              "reviewSubmission": {
-                                  "data": {"type": "reviewSubmissions", "id": review_submission_id}
-                              },
-                              "appStoreVersion": {
-                                  "data": {"type": "appStoreVersions", "id": version_id}
-                              },
-                          },
-                      }
-                  }
-              ),
-          )["data"]
-          print(f"Created reviewSubmissionItem {item['id']}")
+          review_submission_id = os.environ["REVIEW_SUBMISSION_ID"]
+          print(f"Updating existing reviewSubmission {review_submission_id}")
 
           submitted = request(
               "PATCH",
