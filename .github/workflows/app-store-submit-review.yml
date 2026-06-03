@@ -16,7 +16,6 @@ env:
   APP_IDENTIFIER: com.nhscareercoach.app
   MARKETING_VERSION: "1.0"
   EXPECTED_BUILD_NUMBER: "11"
-  REVIEW_SUBMISSION_ID: ab8003e3-1d41-49d6-b53c-2ebe75de759d
 
 jobs:
   submit-review:
@@ -141,7 +140,6 @@ jobs:
           if build_number != expected_build:
               raise RuntimeError(f"Expected build {expected_build}, but version has build {build_number}.")
 
-          review_submission_id = os.environ["REVIEW_SUBMISSION_ID"]
           print("Review submission diagnostics:")
           review_submissions = data_request(
               "GET",
@@ -151,15 +149,92 @@ jobs:
           for review_submission in review_submissions:
               print_resource("reviewSubmission", review_submission)
 
-          selected_submission = data_request("GET", f"reviewSubmissions/{review_submission_id}")["data"]
-          print_resource("selected reviewSubmission", selected_submission)
-
-          items_payload, items_response = request("GET", f"reviewSubmissions/{review_submission_id}/items", allow_error=True)
-          if items_payload:
-              for item in items_payload.get("data", []):
-                  print_resource("reviewSubmissionItem", item)
+          ready_submission = next(
+              (
+                  submission
+                  for submission in review_submissions
+                  if submission.get("attributes", {}).get("state") == "READY_FOR_REVIEW"
+              ),
+              None,
+          )
+          if ready_submission:
+              target_review_submission_id = ready_submission["id"]
           else:
-              print(f"Unable to list review submission items: HTTP {items_response.status_code}")
+              print("No READY_FOR_REVIEW draft submission found; creating one.")
+              created_submission = data_request(
+                  "POST",
+                  "reviewSubmissions",
+                  data=json.dumps(
+                      {
+                          "data": {
+                              "type": "reviewSubmissions",
+                              "relationships": {
+                                  "app": {
+                                      "data": {
+                                          "type": "apps",
+                                          "id": app_id,
+                                      }
+                                  }
+                              },
+                          }
+                      }
+                  ),
+              )["data"]
+              print_resource("created reviewSubmission", created_submission)
+              target_review_submission_id = created_submission["id"]
+
+          print(f"Using target reviewSubmission {target_review_submission_id}")
+
+          target_has_version_item = False
+          for review_submission in review_submissions:
+              submission_id = review_submission["id"]
+              items_payload, items_response = request("GET", f"reviewSubmissions/{submission_id}/items", allow_error=True)
+              if not items_payload:
+                  print(f"Unable to list review submission items for {submission_id}: HTTP {items_response.status_code}")
+                  continue
+
+              for item in items_payload.get("data", []):
+                  print_resource(f"reviewSubmissionItem in {submission_id}", item)
+                  item_id = item["id"]
+                  item_state = item.get("attributes", {}).get("state")
+                  if submission_id == target_review_submission_id:
+                      target_has_version_item = True
+                  elif item_state in {"REJECTED", "DEVELOPER_REJECTED"}:
+                      print(f"Removing rejected reviewSubmissionItem {item_id} from stale submission {submission_id}")
+                      request("DELETE", f"reviewSubmissionItems/{item_id}")
+
+          if not target_has_version_item:
+              print(f"Adding appStoreVersion {version_id} to reviewSubmission {target_review_submission_id}")
+              created_item_payload, created_item_response = request(
+                  "POST",
+                  "reviewSubmissionItems",
+                  allow_error=True,
+                  data=json.dumps(
+                      {
+                          "data": {
+                              "type": "reviewSubmissionItems",
+                              "relationships": {
+                                  "appStoreVersion": {
+                                      "data": {
+                                          "type": "appStoreVersions",
+                                          "id": version_id,
+                                      }
+                                  },
+                                  "reviewSubmission": {
+                                      "data": {
+                                          "type": "reviewSubmissions",
+                                          "id": target_review_submission_id,
+                                      }
+                                  },
+                              },
+                          }
+                      }
+                  ),
+              )
+              if created_item_payload:
+                  print_resource("created reviewSubmissionItem", created_item_payload["data"])
+              else:
+                  raise RuntimeError(f"Unable to add app version to review submission. HTTP {created_item_response.status_code}.")
 
           app_infos = data_request("GET", f"apps/{app_id}/appInfos", params={"limit": "10"}).get("data", [])
           for app_info in app_infos:
@@ -175,20 +250,20 @@ jobs:
               else:
                   print(f"Unable to list app info localizations: HTTP {localizations_response.status_code}")
 
-          print(f"Submitting existing reviewSubmission {review_submission_id}")
+          print(f"Submitting reviewSubmission {target_review_submission_id}")
 
           submit_body = json.dumps(
               {
                   "data": {
                       "type": "reviewSubmissions",
-                      "id": review_submission_id,
+                      "id": target_review_submission_id,
                       "attributes": {"submitted": True},
                   }
               }
           )
           submitted_payload, submitted_response = request(
               "PATCH",
-              f"reviewSubmissions/{review_submission_id}",
+              f"reviewSubmissions/{target_review_submission_id}",
               allow_error=True,
               data=submit_body,
           )
