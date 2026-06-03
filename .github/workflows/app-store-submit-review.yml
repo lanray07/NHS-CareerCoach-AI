@@ -89,9 +89,8 @@ jobs:
 
           versions = request(
               "GET",
-              "appStoreVersions",
+              f"apps/{app_id}/appStoreVersions",
               params={
-                  "filter[app]": app_id,
                   "filter[platform]": "IOS",
                   "filter[versionString]": marketing_version,
                   "limit": "10",
